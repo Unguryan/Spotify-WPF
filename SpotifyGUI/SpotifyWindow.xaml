@@ -1,0 +1,49 @@
+﻿<Window x:Class="SpotifyGUI.SpotifyWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SpotifyGUI"
+        mc:Ignorable="d"
+        Title="Spotify Player" Height="459.45" Width="612"
+        WindowStartupLocation="CenterScreen" 
+       >
+    <Grid>
+        <Label x:Name="NameLabel" Content="Login as " HorizontalAlignment="Left" Margin="10,385,0,0" VerticalAlignment="Top" Width="215" FontSize="16" FontWeight="Bold"/>
+        <DataGrid x:Name="DGAll" HorizontalAlignment="Left" Height="324" Margin="119,61,0,0" VerticalAlignment="Top" Width="477" AutoGenerateColumns="False" IsReadOnly="True" MouseDoubleClick="DGFeat_MouseDoubleClick" Background="Transparent" RowBackground="Transparent" SelectionChanged="DGAll_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Width="400" Binding="{Binding Path=Name}"/>
+                <DataGridTextColumn Header="Total" Width="100" Binding="{Binding Path=Tracks.Total}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button Content="?" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="21" BorderBrush="White" Background="White" Margin="402,0,0,616.2" Click="Button_Click" Foreground="#FFD7D7D7"/>
+        <Label x:Name="Feat" Content="" HorizontalAlignment="Left" Margin="116,29,0,0" VerticalAlignment="Top" Width="400" FontSize="16" FontWeight="Bold" RenderTransformOrigin="0.5,0.5">
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform AngleY="0.159"/>
+                    <RotateTransform/>
+                    <TranslateTransform Y="0.397"/>
+                </TransformGroup>
+            </Label.RenderTransform>
+        </Label>
+        <Button Content="∞" HorizontalAlignment="Left" Margin="565,-1,0,0" VerticalAlignment="Top" Width="30" FontWeight="Bold" FontSize="16" Height="30" Click="Button_Click_1"/>
+        <DataGrid x:Name="DGCurrent" HorizontalAlignment="Left" Height="319" Margin="119,61,0,0" VerticalAlignment="Top" Width="476" AutoGenerateColumns="False" IsReadOnly="True" Visibility="Hidden" Background="Transparent" RowBackground="Transparent">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Width="400" Binding="{Binding Track.Name}"/>
+                <DataGridTextColumn Header="Duraction" Width="100" Binding="{Binding Track.GetDuration}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Label Content="Current Playlist" HorizontalAlignment="Left" Margin="609,545,0,0" VerticalAlignment="Top" FontSize="18" FontWeight="Bold"/>
+        <Button x:Name="MyPlayBut" Content="My PlayList" HorizontalAlignment="Left" Margin="69,0,0,0" VerticalAlignment="Top" Width="75" Height="30" Click="Button_Click_2"/>
+        <Button x:Name="FeaturedBut" Content="Featured" HorizontalAlignment="Left" Margin="144,0,0,0" VerticalAlignment="Top" Width="75" Height="30" Click="FeaturedBut_Click"/>
+        <Button x:Name="RecentlyBut" Content="Recently" HorizontalAlignment="Left" Margin="219,0,0,0" VerticalAlignment="Top" Width="75" Height="30" Click="RecentlyBut_Click"/>
+        <Button x:Name="ChartsBut" Content="Charts" HorizontalAlignment="Left" Margin="294,0,0,0" VerticalAlignment="Top" Width="75" Height="30" Click="ChartsBut_Click"/>
+        <Button x:Name="GenresBut" Content="Genres" HorizontalAlignment="Left" Margin="369,0,0,0" VerticalAlignment="Top" Width="75" Height="30" Click="Genres_Click"/>
+        <Button x:Name="NewRealisesBut" Content="New Realises" HorizontalAlignment="Left" Margin="444,0,0,0" VerticalAlignment="Top" Width="75" Height="30" Click="NewRealises_Click"/>
+        <Button x:Name="BackBut" Content="Back" HorizontalAlignment="Left" Margin="44,61,0,0" VerticalAlignment="Top" Width="75" Height="30" Click="BackBut_Click" Visibility="Hidden"/>
+        <Label Content="Search" HorizontalAlignment="Left" Margin="0,122,0,0" VerticalAlignment="Top" FontSize="16" FontWeight="Bold"/>
+        <TextBox x:Name="TBSearch" HorizontalAlignment="Left" Height="30" Margin="4,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="110" Background="#FFFFEDED"/>
+        <Button Content="Go" HorizontalAlignment="Left" Margin="20,185,0,0" VerticalAlignment="Top" Width="75" Height="25" Click="Button_Click_3"/>
+    </Grid>
+</Window>
