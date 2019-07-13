@@ -53,7 +53,7 @@ namespace SpotifyGUI
         {
             auth.StartHttpServer();
             auth.DoAuth();
-            Thread.Sleep(5000);
+            Thread.Sleep(1500);
             Token a = auth.ExchangeAuthCode(SpotifyLogin.GrantCode, SpotifyLogin.GetClient_Secret);
 
             headers.Add("Authorization", "Bearer " + a.AccessToken);
