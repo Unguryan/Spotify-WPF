@@ -7,6 +7,8 @@ using Spotify;
 using Spotify.Models;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using System.Windows.Media;
+using System.Windows.Controls;
 
 namespace SpotifyGUI
 {
@@ -25,7 +27,7 @@ namespace SpotifyGUI
 
             Tuple<ResponseInfo, string> tuple = client.Download(builder.GetPrivateProfile(), headers);
             var obj = JsonConvert.DeserializeObject<PrivateProfile>(tuple.Item2);
-            NameLabel.Content += obj.DisplayName;
+            NameLabel.Text += obj.DisplayName;
             SpotifyLogin.IdCurrentUser = obj.Id;
             SpotifyLogin.CurrentLocation = obj.Country;
 
@@ -37,7 +39,7 @@ namespace SpotifyGUI
             UpdateMyPlayist();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)//?
+        private void AboutMeBut_Click(object sender, RoutedEventArgs e)//?
         {
             MessageBox.Show("Create By: Unguryan Alexandr\nGit: Unguryan\nTelegram:@Unguryan");
         }
@@ -139,7 +141,7 @@ namespace SpotifyGUI
             catch { }
         }
 
-        private void UpdateNewRealise()
+        private void UpdateNewReleases()
         {
             try
             {
@@ -180,7 +182,7 @@ namespace SpotifyGUI
 
 
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void UpdateBut_Click(object sender, RoutedEventArgs e)
         {
             if (!MyPlayBut.IsEnabled)
             {
@@ -209,7 +211,7 @@ namespace SpotifyGUI
             }
             if (!NewRealisesBut.IsEnabled)
             {
-                UpdateNewRealise();
+                UpdateNewReleases();
                 return;
             }
         }
@@ -277,7 +279,7 @@ namespace SpotifyGUI
             }
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)//MyPlaylist
+        private void MyPlayListBut_Click(object sender, RoutedEventArgs e)
         {
             Visible(MyPBut:false);
             UpdateMyPlayist();
@@ -301,16 +303,16 @@ namespace SpotifyGUI
             UpdateCharts();
         }
 
-        private void Genres_Click(object sender, RoutedEventArgs e)
+        private void GenreBut_Click(object sender, RoutedEventArgs e)
         {
             Visible(GenreBut: false);
             UpdateGenres();
         }
 
-        private void NewRealises_Click(object sender, RoutedEventArgs e)
+        private void NewRealisesBut_Click(object sender, RoutedEventArgs e)
         {
             Visible(NewRealBut: false);
-            UpdateNewRealise();
+            UpdateNewReleases();
         }
 
         
@@ -321,13 +323,13 @@ namespace SpotifyGUI
 
         private void BackBut_Click(object sender, RoutedEventArgs e)
         {
-            Button_Click_1(sender, e);
+            UpdateBut_Click(sender, e);
             BackBut.Visibility = Visibility.Hidden;
             DGAll.Visibility = Visibility.Visible;
             DGCurrent.Visibility = Visibility.Hidden;
         }
 
-        private void Button_Click_3(object sender, RoutedEventArgs e)//search
+        private void SearchBut_Click(object sender, RoutedEventArgs e)
         {
             Regex regex = new Regex(@"\s+");
             if (!regex.IsMatch(TBSearch.Text))
@@ -364,5 +366,7 @@ namespace SpotifyGUI
             GenresBut.IsEnabled = GenreBut;
             NewRealisesBut.IsEnabled = NewRealBut;
         }
+
+        
     }
 }
