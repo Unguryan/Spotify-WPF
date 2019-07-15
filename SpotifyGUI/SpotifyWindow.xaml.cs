@@ -94,7 +94,7 @@ namespace SpotifyGUI
                     }
                     else if (t.Context.Type == "playlist")
                     {
-                        tuple1 = client.Download(builder.GetPlaylist(SpotifyLogin.IdCurrentUser, t.Track.Album.Uri.Substring(17)), headers);
+                        tuple1 = client.Download(builder.GetPlaylist(t.Track.Album.Uri.Substring(17)), headers);
                         var obj2 = JsonConvert.DeserializeObject<FullPlaylist>(tuple1.Item2);
                         list.Add(new SimplePlaylist() { Name = obj2.Name, Id = obj2.Id, Type = obj2.Type, Owner = obj2.Owner, Tracks = new PlaylistTrackCollection() { Total = obj2.Tracks.Total } });
                     }
@@ -143,23 +143,28 @@ namespace SpotifyGUI
 
         private void UpdateNewReleases()
         {
-            try
-            {
                 Tuple<ResponseInfo, string> tuple1 = client.Download(builder.GetNewAlbumReleases(SpotifyLogin.CurrentLocation, 20), headers);
+                Tuple<ResponseInfo, string> tuple2 = client.Download(builder.GetCategoryPlaylists("toplists", "GB",50), headers);
 
+                var Obj = JsonConvert.DeserializeObject<CategoryPlaylist>(tuple2.Item2);
                 var obj = JsonConvert.DeserializeObject<NewAlbumReleases>(tuple1.Item2);
                 List<SimplePlaylist> list = new List<SimplePlaylist>();
 
+                Tuple<ResponseInfo, string> tuple4 = client.Download(builder.GetPlaylist(Obj.Playlists.Items[3].Id), headers);
+                var obj2 = JsonConvert.DeserializeObject<FullPlaylist>(tuple4.Item2);
+                list.Add(new SimplePlaylist() { Name = obj2.Name, Id = obj2.Id, Type = obj2.Type, Tracks = new PlaylistTrackCollection() { Total = obj2.Tracks.Total } });
+
+
                 foreach (var t in obj.Albums.Items)
                 {
-                    Tuple<ResponseInfo, string> tuple2 = client.Download(builder.GetAlbum(t.Uri.Substring(14)), headers);
-                    var obj1 = JsonConvert.DeserializeObject<FullAlbum>(tuple2.Item2);
+                    Tuple<ResponseInfo, string> tuple3 = client.Download(builder.GetAlbum(t.Uri.Substring(14)), headers);
+                    var obj1 = JsonConvert.DeserializeObject<FullAlbum>(tuple3.Item2);
                     list.Add(new SimplePlaylist() { Name = obj1.Name, Id = obj1.Id, Type = obj1.Type, Tracks = new PlaylistTrackCollection() { Total = obj1.Tracks.Total } });
                 }
+
+                
                 DGAll.Columns[1].Visibility = Visibility.Visible;
                 DGAll.ItemsSource = list;
-            }
-            catch { }
         }
 
         private void UpdateGenres()
