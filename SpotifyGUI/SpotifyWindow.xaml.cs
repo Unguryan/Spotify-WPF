@@ -9,9 +9,14 @@ using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using System.Windows.Media;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
+using System.Windows.Data;
+using System.Globalization;
+using System.Data;
 
 namespace SpotifyGUI
 {
+
     /// <summary>
     /// Логика взаимодействия для SpotifyWindow.xaml
     /// </summary>
@@ -23,8 +28,8 @@ namespace SpotifyGUI
         public SpotifyWindow()
         {
             InitializeComponent();
-            headers.Add("Authorization", "Bearer " + SpotifyLogin.AccessToken);
 
+            headers.Add("Authorization", "Bearer " + SpotifyLogin.AccessToken);
             Tuple<ResponseInfo, string> tuple = client.Download(builder.GetPrivateProfile(), headers);
             var obj = JsonConvert.DeserializeObject<PrivateProfile>(tuple.Item2);
             NameLabel.Text += obj.DisplayName;
@@ -37,6 +42,13 @@ namespace SpotifyGUI
             MyPlayBut.IsEnabled = false;
 
             UpdateMyPlayist();
+        }
+
+
+
+        public ImageSource GetImage(string link)
+        {
+            return BitmapFrame.Create(new Uri(link));
         }
 
         private void AboutMeBut_Click(object sender, RoutedEventArgs e)//?
@@ -53,8 +65,9 @@ namespace SpotifyGUI
                 var obj = JsonConvert.DeserializeObject<FeaturedPlaylists>(Featured.Item2);
 
                 Feat.Content = obj.Message;
-                DGAll.Columns[1].Visibility = Visibility.Visible;
+                DGAll.Columns[2].Visibility = Visibility.Visible;
                 DGAll.ItemsSource = obj.Playlists.Items;
+
             }
             catch { }
         }
@@ -68,7 +81,7 @@ namespace SpotifyGUI
                 var obj = JsonConvert.DeserializeObject<CursorPaging<PlayHistory>>(Recently.Item2);
 
                 IEnumerable<SimplePlaylist> list = GetPlaylist(obj);
-                DGAll.Columns[1].Visibility = Visibility.Visible;
+                DGAll.Columns[2].Visibility = Visibility.Visible;
                 DGAll.ItemsSource = list;
             }
             catch { }
@@ -90,19 +103,19 @@ namespace SpotifyGUI
                     {
                         tuple1 = client.Download(builder.GetAlbum(t.Track.Album.Uri.Substring(14)), headers);
                         var obj1 = JsonConvert.DeserializeObject<FullAlbum>(tuple1.Item2);
-                        list.Add(new SimplePlaylist() { Name = obj1.Name, Id = obj1.Id, Type = obj1.Type, Tracks = new PlaylistTrackCollection() { Total = obj1.Tracks.Total} });
+                        list.Add(new SimplePlaylist() { Name = obj1.Name, Id = obj1.Id, Images = obj1.Images, Type = obj1.Type, Tracks = new PlaylistTrackCollection() { Total = obj1.Tracks.Total } });
                     }
                     else if (t.Context.Type == "playlist")
                     {
                         tuple1 = client.Download(builder.GetPlaylist(t.Track.Album.Uri.Substring(17)), headers);
                         var obj2 = JsonConvert.DeserializeObject<FullPlaylist>(tuple1.Item2);
-                        list.Add(new SimplePlaylist() { Name = obj2.Name, Id = obj2.Id, Type = obj2.Type, Owner = obj2.Owner, Tracks = new PlaylistTrackCollection() { Total = obj2.Tracks.Total } });
+                        list.Add(new SimplePlaylist() { Name = obj2.Name, Id = obj2.Id, Images = obj2.Images, Type = obj2.Type, Owner = obj2.Owner, Tracks = new PlaylistTrackCollection() { Total = obj2.Tracks.Total } });
                     }
                     else if (t.Context.Type == "artist")
                     {
                         tuple1 = client.Download(builder.GetArtist(t.Track.Album.Uri.Substring(15)), headers);
                         var obj3 = JsonConvert.DeserializeObject<FullArtist>(tuple1.Item2);
-                        list.Add(new SimplePlaylist() { Name = obj3.Name, Id = obj3.Id, Type = obj3.Type });
+                        list.Add(new SimplePlaylist() { Name = obj3.Name, Id = obj3.Id, Images = obj3.Images, Type = obj3.Type });
                     }
                 }
 
@@ -120,7 +133,7 @@ namespace SpotifyGUI
 
                 var obj = JsonConvert.DeserializeObject<Paging<SimplePlaylist>>(My.Item2);
 
-                DGAll.Columns[1].Visibility = Visibility.Visible;
+                DGAll.Columns[2].Visibility = Visibility.Visible;
                 DGAll.ItemsSource = obj.Items;
             }
             catch { }
@@ -135,7 +148,7 @@ namespace SpotifyGUI
                 var obj = JsonConvert.DeserializeObject<CategoryPlaylist>(tuple1.Item2);
 
                 obj.Playlists.Items.RemoveRange(0, 10);
-                DGAll.Columns[1].Visibility = Visibility.Visible;
+                DGAll.Columns[2].Visibility = Visibility.Visible;
                 DGAll.ItemsSource = obj.Playlists.Items;
             }
             catch { }
@@ -143,28 +156,28 @@ namespace SpotifyGUI
 
         private void UpdateNewReleases()
         {
-                Tuple<ResponseInfo, string> tuple1 = client.Download(builder.GetNewAlbumReleases(SpotifyLogin.CurrentLocation, 20), headers);
-                Tuple<ResponseInfo, string> tuple2 = client.Download(builder.GetCategoryPlaylists("toplists", "GB",50), headers);
+            Tuple<ResponseInfo, string> tuple1 = client.Download(builder.GetNewAlbumReleases(SpotifyLogin.CurrentLocation, 20), headers);
+            Tuple<ResponseInfo, string> tuple2 = client.Download(builder.GetCategoryPlaylists("toplists", "GB", 50), headers);
 
-                var Obj = JsonConvert.DeserializeObject<CategoryPlaylist>(tuple2.Item2);
-                var obj = JsonConvert.DeserializeObject<NewAlbumReleases>(tuple1.Item2);
-                List<SimplePlaylist> list = new List<SimplePlaylist>();
+            var Obj = JsonConvert.DeserializeObject<CategoryPlaylist>(tuple2.Item2);
+            var obj = JsonConvert.DeserializeObject<NewAlbumReleases>(tuple1.Item2);
+            List<SimplePlaylist> list = new List<SimplePlaylist>();
 
-                Tuple<ResponseInfo, string> tuple4 = client.Download(builder.GetPlaylist(Obj.Playlists.Items[3].Id), headers);
-                var obj2 = JsonConvert.DeserializeObject<FullPlaylist>(tuple4.Item2);
-                list.Add(new SimplePlaylist() { Name = obj2.Name, Id = obj2.Id, Type = obj2.Type, Tracks = new PlaylistTrackCollection() { Total = obj2.Tracks.Total } });
+            Tuple<ResponseInfo, string> tuple4 = client.Download(builder.GetPlaylist(Obj.Playlists.Items[3].Id), headers);
+            var obj2 = JsonConvert.DeserializeObject<FullPlaylist>(tuple4.Item2);
+            list.Add(new SimplePlaylist() { Name = obj2.Name, Id = obj2.Id, Images = obj2.Images, Owner = obj2.Owner, Type = obj2.Type, Tracks = new PlaylistTrackCollection() { Total = obj2.Tracks.Total } });
 
 
-                foreach (var t in obj.Albums.Items)
-                {
-                    Tuple<ResponseInfo, string> tuple3 = client.Download(builder.GetAlbum(t.Uri.Substring(14)), headers);
-                    var obj1 = JsonConvert.DeserializeObject<FullAlbum>(tuple3.Item2);
-                    list.Add(new SimplePlaylist() { Name = obj1.Name, Id = obj1.Id, Type = obj1.Type, Tracks = new PlaylistTrackCollection() { Total = obj1.Tracks.Total } });
-                }
+            foreach (var t in obj.Albums.Items)
+            {
+                Tuple<ResponseInfo, string> tuple3 = client.Download(builder.GetAlbum(t.Uri.Substring(14)), headers);
+                var obj1 = JsonConvert.DeserializeObject<FullAlbum>(tuple3.Item2);
+                list.Add(new SimplePlaylist() { Name = obj1.Name, Id = obj1.Id, Images = obj1.Images, Type = obj1.Type, Tracks = new PlaylistTrackCollection() { Total = obj1.Tracks.Total } });
+            }
 
-                
-                DGAll.Columns[1].Visibility = Visibility.Visible;
-                DGAll.ItemsSource = list;
+
+            DGAll.Columns[2].Visibility = Visibility.Visible;
+            DGAll.ItemsSource = list;
         }
 
         private void UpdateGenres()
@@ -172,14 +185,14 @@ namespace SpotifyGUI
 
             try
             {
-                Tuple<ResponseInfo, string> tuple1 = client.Download(builder.GetCategories(SpotifyLogin.CurrentLocation,"", 40), headers);
+                Tuple<ResponseInfo, string> tuple1 = client.Download(builder.GetCategories(SpotifyLogin.CurrentLocation, "", 40), headers);
                 var obj = JsonConvert.DeserializeObject<CategoryList>(tuple1.Item2);
                 List<SimplePlaylist> list = new List<SimplePlaylist>();
                 foreach (var t in obj.Categories.Items)
-                    list.Add(new SimplePlaylist() { Name = t.Name, Id = t.Id});
+                    list.Add(new SimplePlaylist() { Name = t.Name, Id = t.Id, Images = t.Icons });
 
                 list.RemoveAt(0);
-                DGAll.Columns[1].Visibility = Visibility.Hidden;
+                DGAll.Columns[2].Visibility = Visibility.Hidden;
                 DGAll.ItemsSource = list;
             }
             catch { }
@@ -233,7 +246,7 @@ namespace SpotifyGUI
 
                     var obj = JsonConvert.DeserializeObject<CategoryPlaylist>(tuple.Item2);
 
-                    DGAll.Columns[1].Visibility = Visibility.Visible;
+                    DGAll.Columns[2].Visibility = Visibility.Visible;
                     DGAll.ItemsSource = obj.Playlists.Items;
                     DGCurrent.Visibility = Visibility.Hidden;
                     BackBut.Visibility = Visibility.Visible;
@@ -286,7 +299,7 @@ namespace SpotifyGUI
 
         private void MyPlayListBut_Click(object sender, RoutedEventArgs e)
         {
-            Visible(MyPBut:false);
+            Visible(MyPBut: false);
             UpdateMyPlayist();
         }
 
@@ -320,7 +333,7 @@ namespace SpotifyGUI
             UpdateNewReleases();
         }
 
-        
+
 
         private void DGAll_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
@@ -346,10 +359,10 @@ namespace SpotifyGUI
                 {
                     list.Add(new PlaylistTrack() { Track = t });
                 }
-                foreach(var g in list)
+                foreach (var g in list)
                 {
-                    if(g.Track.Artists != null)
-                    g.Track.Name += " - " + g.Track.Artists.FirstOrDefault().Name; 
+                    if (g.Track.Artists != null)
+                        g.Track.Name += " - " + g.Track.Artists.FirstOrDefault().Name;
                 }
                 Visible(DGAllVis: Visibility.Hidden, DGCurrentVis: Visibility.Visible, MyPBut: true);
                 DGCurrent.ItemsSource = list;
@@ -372,6 +385,24 @@ namespace SpotifyGUI
             NewRealisesBut.IsEnabled = NewRealBut;
         }
 
-        
+
+    }
+
+    [ValueConversion(typeof(string), typeof(BitmapImage))]
+    public class ImageConverter : IValueConverter
+    {
+        public object Convert(
+            object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return new BitmapImage(new Uri(value.ToString()));
+        }
+
+        public object ConvertBack(
+            object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotSupportedException();
+        }
+
+
     }
 }
