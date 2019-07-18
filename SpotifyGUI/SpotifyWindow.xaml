@@ -81,8 +81,17 @@
             <Setter Property="RowHeight" Value="35"></Setter>
             <Setter Property="Margin" Value="5"></Setter>
             <Setter Property="HeadersVisibility" Value="Column"></Setter>
+            
         </Style>
 
+        <Style TargetType="{x:Type DataGridCell}">
+            <Style.Triggers>
+                <Trigger Property="DataGridCell.IsSelected" Value="True">
+                    <Setter Property="Background" Value="#EF7266" />
+                    <Setter Property="BorderThickness" Value="0"></Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
 
         <Style x:Key="TextStyle" TargetType="TextBlock">
             <Setter Property="HorizontalAlignment" Value="Center"></Setter>
@@ -122,7 +131,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <Button Content="?" VerticalAlignment="Top" BorderBrush="White" Background="White" Margin="2,540,0,0" Click="AboutMeBut_Click" Foreground="#FFD7D7D7" HorizontalAlignment="Left" Width="21"/>
-        <Label x:Name="Feat" Content="" HorizontalAlignment="Left" Margin="96,57,0,0" VerticalAlignment="Top" Width="415" FontSize="20" FontWeight="Bold" RenderTransformOrigin="0.5,0.5" FontFamily="Georgia" Height="36">
+        <Label x:Name="Feat" Content="" HorizontalAlignment="Left" Margin="96,57,0,0" VerticalAlignment="Top" Width="726" FontSize="20" FontWeight="Bold" RenderTransformOrigin="0.5,0.5" FontFamily="Georgia" Height="36">
         </Label>
         <Button Content="∞" HorizontalAlignment="Left" Margin="829,1,0,0" VerticalAlignment="Top" Width="30" FontWeight="Bold" FontSize="16" Height="30" Click="UpdateBut_Click">
             <Button.ToolTip>
@@ -144,7 +153,7 @@
         <Button x:Name="GenresBut" Style="{StaticResource ButStyle}" Content="Genres" HorizontalAlignment="Left" Margin="359,0,0,0" VerticalAlignment="Top" Width="90" Height="36" Click="GenreBut_Click" BorderBrush="White" Background="{x:Null}" FontFamily="Sitka Small"/>
         <Button x:Name="NewRealisesBut" Style="{StaticResource ButStyle}" Content="New Releases" HorizontalAlignment="Left" Margin="449,0,0,0" VerticalAlignment="Top" Width="89" Height="36" Click="NewRealisesBut_Click" BorderBrush="White" Background="{x:Null}" FontFamily="Sitka Small"/>
         <Button x:Name="BackBut" Content="Back" HorizontalAlignment="Left" Margin="8,60,0,0" VerticalAlignment="Top" Width="75" Height="30" Click="BackBut_Click" Visibility="Hidden" BorderBrush="White" FontFamily="Sitka Small"/>
-        <TextBox x:Name="TBSearch" HorizontalAlignment="Left" Height="25" Margin="575,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="158" Background="#FFFFEDED"/>
+        <TextBox x:Name="TBSearch" HorizontalAlignment="Left" Height="25" Margin="575,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="158" Background="#FFFFEDED" KeyDown="TBSearch_KeyDown"/>
         <Button Content="Search" HorizontalAlignment="Left" Margin="738,5,0,0" VerticalAlignment="Top" Width="75" Height="25" Click="SearchBut_Click" FontFamily="Sitka Small"/>
 
     </Grid>

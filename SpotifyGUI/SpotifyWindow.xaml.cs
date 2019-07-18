@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Data;
 using System.Globalization;
 using System.Data;
+using System.Windows.Input;
 
 namespace SpotifyGUI
 {
@@ -349,9 +350,7 @@ namespace SpotifyGUI
 
         private void SearchBut_Click(object sender, RoutedEventArgs e)
         {
-            Regex regex = new Regex(@"\s+");
-            if (!regex.IsMatch(TBSearch.Text))
-            {
+            try { 
                 Tuple<ResponseInfo, string> tuple = client.Download(builder.SearchItems(TBSearch.Text, Spotify.Enums.SearchType.Track, 30), headers);
                 var obj = JsonConvert.DeserializeObject<SearchItem>(tuple.Item2);
                 List<PlaylistTrack> list = new List<PlaylistTrack>();
@@ -366,6 +365,10 @@ namespace SpotifyGUI
                 }
                 Visible(DGAllVis: Visibility.Hidden, DGCurrentVis: Visibility.Visible, MyPBut: true);
                 DGCurrent.ItemsSource = list;
+            }
+            catch
+            {
+
             }
         }
 
@@ -385,7 +388,13 @@ namespace SpotifyGUI
             NewRealisesBut.IsEnabled = NewRealBut;
         }
 
-
+        private void TBSearch_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter)
+            {
+                SearchBut_Click(sender, e);
+            }
+        }
     }
 
     [ValueConversion(typeof(string), typeof(BitmapImage))]
