@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SpotifyGUI"
         mc:Ignorable="d"
-        Title="Spotify Player" Height="590" Width="875"
+        Title="Spotify Player" Height="600" Width="950"
         WindowStartupLocation="CenterScreen" 
     >
     <Window.Resources>
@@ -81,7 +81,7 @@
             <Setter Property="RowHeight" Value="35"></Setter>
             <Setter Property="Margin" Value="5"></Setter>
             <Setter Property="HeadersVisibility" Value="Column"></Setter>
-            
+
         </Style>
 
         <Style TargetType="{x:Type DataGridCell}">
@@ -97,6 +97,7 @@
             <Setter Property="HorizontalAlignment" Value="Center"></Setter>
             <Setter Property="VerticalAlignment" Value="Center"></Setter>
             <Setter Property="FontSize" Value="18"></Setter>
+            <Setter Property="TextWrapping" Value="Wrap"></Setter>
         </Style>
 
         <Style x:Key="HeaderStyle" TargetType="DataGridColumnHeader">
@@ -113,8 +114,8 @@
     </Window.Resources>
 
     <Grid >
-        <TextBlock x:Name="NameLabel" Text="Login as " TextBlock.TextAlignment="Right" HorizontalAlignment="Right" Margin="0,531,4.8,1.8" VerticalAlignment="Center" Width="315" FontSize="16" FontWeight="Bold" Foreground="Black" Height="28" FontFamily="Palatino Linotype"/>
-        <DataGrid x:Name="DGAll" Style="{StaticResource DGStyle}" RowHeight="200" ColumnHeaderStyle="{StaticResource HeaderStyle}" HorizontalAlignment="Center" Height="432" Margin="10,103,0,25.8" VerticalAlignment="Center"  Width="849" AutoGenerateColumns="False" IsReadOnly="True" MouseDoubleClick="DGFeat_MouseDoubleClick" Background="Transparent" RowBackground="Transparent" SelectionChanged="DGAll_SelectionChanged" FontSize="16" BorderBrush="{x:Null}">
+        <TextBlock x:Name="NameLabel" Text="Login as " TextBlock.TextAlignment="Right" HorizontalAlignment="Right" Margin="0,543,5,-0.6" VerticalAlignment="Center" Width="315" FontSize="16" FontWeight="Bold" Foreground="Black" Height="28" FontFamily="Palatino Linotype"/>
+        <DataGrid x:Name="DGAll" Style="{StaticResource DGStyle}" RowHeight="200" ColumnHeaderStyle="{StaticResource HeaderStyle}" HorizontalAlignment="Center" Height="432" Margin="10,106,7,32.4" VerticalAlignment="Center"  Width="927" AutoGenerateColumns="False" IsReadOnly="True" MouseDoubleClick="DGFeat_MouseDoubleClick" Background="Transparent" RowBackground="Transparent" SelectionChanged="DGAll_SelectionChanged" FontSize="16" BorderBrush="{x:Null}">
 
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="" Width="200" Visibility="Visible" 
@@ -126,35 +127,42 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn ElementStyle="{StaticResource TextStyle}" Header="Playlist" Width="400" Binding="{Binding Name}" />
+                <DataGridTextColumn ElementStyle="{StaticResource TextStyle}" Header="Playlist" Width="490" Binding="{Binding Name}" />
                 <DataGridTextColumn ElementStyle="{StaticResource TextStyle}" Header="Tracks" Width="270" Binding="{Binding Tracks.Total}"/>
             </DataGrid.Columns>
         </DataGrid>
         <Button Content="?" VerticalAlignment="Top" BorderBrush="White" Background="White" Margin="2,540,0,0" Click="AboutMeBut_Click" Foreground="#FFD7D7D7" HorizontalAlignment="Left" Width="21"/>
-        <Label x:Name="Feat" Content="" HorizontalAlignment="Left" Margin="96,57,0,0" VerticalAlignment="Top" Width="726" FontSize="20" FontWeight="Bold" RenderTransformOrigin="0.5,0.5" FontFamily="Georgia" Height="36">
+        <Label x:Name="Feat" Content="" HorizontalAlignment="Left" Margin="96,62,0,0" VerticalAlignment="Top" Width="726" FontSize="20" FontWeight="Bold" RenderTransformOrigin="0.5,0.5" FontFamily="Georgia" Height="36">
         </Label>
-        <Button Content="∞" HorizontalAlignment="Left" Margin="829,1,0,0" VerticalAlignment="Top" Width="30" FontWeight="Bold" FontSize="16" Height="30" Click="UpdateBut_Click">
+        <Button Content="∞" Style="{StaticResource ButStyle}" HorizontalAlignment="Left" Margin="902,1,0,0" VerticalAlignment="Top" Width="30" FontWeight="Bold" FontSize="16" Height="30" Click="UpdateBut_Click">
             <Button.ToolTip>
                 <ToolTip>
                     Reload Playlists
                 </ToolTip>
             </Button.ToolTip>
         </Button>
-        <DataGrid x:Name="DGCurrent" Style="{StaticResource DGStyle}" ColumnHeaderStyle="{StaticResource HeaderStyle}" HorizontalAlignment="Left" Height="432" Margin="10,103,0,25.8" VerticalAlignment="Top" Width="849" AutoGenerateColumns="False" IsReadOnly="True" Visibility="Hidden" Background="Transparent" RowBackground="Transparent" FontSize="16">
+        <DataGrid x:Name="DGCurrent" Style="{StaticResource DGStyle}" ColumnHeaderStyle="{StaticResource HeaderStyle}" HorizontalAlignment="Left" Height="432" Margin="222,106,0,0" VerticalAlignment="Top" Width="717" AutoGenerateColumns="False" IsReadOnly="True" Visibility="Hidden" Background="Transparent" RowBackground="Transparent" FontSize="16">
             <DataGrid.Columns>
-                <DataGridTextColumn ElementStyle="{StaticResource TextStyle}" Header="Name" Width="600" Binding="{Binding Track.Name}"/>
+                <DataGridTextColumn ElementStyle="{StaticResource TextStyle}" Header="Name" Width="490" Binding="{Binding Track.Name}"/>
                 <DataGridTextColumn ElementStyle="{StaticResource TextStyle}" Header="Duraction" Width="270" Binding="{Binding Track.GetDuration}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Button x:Name="MyPlayBut" Style="{StaticResource ButStyle}" Content="My PlayList" HorizontalAlignment="Left" Margin="2,0,0,0" VerticalAlignment="Top" Width="89" Height="36" Click="MyPlayListBut_Click" BorderBrush="White" Background="{x:Null}" FontFamily="Sitka Small" />
-        <Button x:Name="FeaturedBut" Style="{StaticResource ButStyle}" Content="Featured" HorizontalAlignment="Left" Margin="91,0,0,0" VerticalAlignment="Top" Width="90" Height="36" Click="FeaturedBut_Click" BorderBrush="White" Background="{x:Null}" FontFamily="Sitka Small"/>
-        <Button x:Name="RecentlyBut" Style="{StaticResource ButStyle}" Content="Recently" HorizontalAlignment="Left" Margin="181,0,0,0" VerticalAlignment="Top" Width="89" Height="36" Click="RecentlyBut_Click" BorderBrush="White" Background="{x:Null}" FontFamily="Sitka Small"/>
-        <Button x:Name="ChartsBut" Style="{StaticResource ButStyle}" Content="Charts" HorizontalAlignment="Left" Margin="270,0,0,0" VerticalAlignment="Top" Width="89" Height="36" Click="ChartsBut_Click" BorderBrush="White" Background="{x:Null}" FontFamily="Sitka Small"/>
-        <Button x:Name="GenresBut" Style="{StaticResource ButStyle}" Content="Genres" HorizontalAlignment="Left" Margin="359,0,0,0" VerticalAlignment="Top" Width="90" Height="36" Click="GenreBut_Click" BorderBrush="White" Background="{x:Null}" FontFamily="Sitka Small"/>
-        <Button x:Name="NewRealisesBut" Style="{StaticResource ButStyle}" Content="New Releases" HorizontalAlignment="Left" Margin="449,0,0,0" VerticalAlignment="Top" Width="89" Height="36" Click="NewRealisesBut_Click" BorderBrush="White" Background="{x:Null}" FontFamily="Sitka Small"/>
-        <Button x:Name="BackBut" Content="Back" HorizontalAlignment="Left" Margin="8,60,0,0" VerticalAlignment="Top" Width="75" Height="30" Click="BackBut_Click" Visibility="Hidden" BorderBrush="White" FontFamily="Sitka Small"/>
-        <TextBox x:Name="TBSearch" HorizontalAlignment="Left" Height="25" Margin="575,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="158" Background="#FFFFEDED" KeyDown="TBSearch_KeyDown"/>
-        <Button Content="Search" HorizontalAlignment="Left" Margin="738,5,0,0" VerticalAlignment="Top" Width="75" Height="25" Click="SearchBut_Click" FontFamily="Sitka Small"/>
+        <Button x:Name="MyPlayBut" Style="{StaticResource ButStyle}" Content="My PlayList" HorizontalAlignment="Left" Margin="2,0,0,0" VerticalAlignment="Top" Width="88" Height="36" Click="MyPlayListBut_Click" BorderBrush="White" Background="{x:Null}" FontFamily="Sitka Small" />
+        <Button x:Name="FeaturedBut" Style="{StaticResource ButStyle}" Content="Featured" HorizontalAlignment="Left" Margin="90,0,0,0" VerticalAlignment="Top" Width="88" Height="36" Click="FeaturedBut_Click" BorderBrush="White" Background="{x:Null}" FontFamily="Sitka Small"/>
+        <Button x:Name="RecentlyBut" Style="{StaticResource ButStyle}" Content="Recently" HorizontalAlignment="Left" Margin="178,0,0,0" VerticalAlignment="Top" Width="88" Height="36" Click="RecentlyBut_Click" BorderBrush="White" Background="{x:Null}" FontFamily="Sitka Small"/>
+        <Button x:Name="ChartsBut" Style="{StaticResource ButStyle}" Content="Charts" HorizontalAlignment="Left" Margin="266,0,0,0" VerticalAlignment="Top" Width="88" Height="36" Click="ChartsBut_Click" BorderBrush="White" Background="{x:Null}" FontFamily="Sitka Small"/>
+        <Button x:Name="GenresBut" Style="{StaticResource ButStyle}" Content="Genres" HorizontalAlignment="Left" Margin="354,0,0,0" VerticalAlignment="Top" Width="88" Height="36" Click="GenreBut_Click" BorderBrush="White" Background="{x:Null}" FontFamily="Sitka Small"/>
+        <Button x:Name="NewRealisesBut" Style="{StaticResource ButStyle}" Content="New Releases" HorizontalAlignment="Left" Margin="442,0,0,0" VerticalAlignment="Top" Width="88" Height="36" Click="NewRealisesBut_Click" BorderBrush="White" Background="{x:Null}" FontFamily="Sitka Small"/>
+        <Button x:Name="BackBut" Content="Back" HorizontalAlignment="Left" Margin="13,66,0,0" VerticalAlignment="Top" Width="75" Height="30" Click="BackBut_Click" Visibility="Hidden" BorderBrush="White" FontFamily="Sitka Small"/>
+        <TextBox x:Name="TBSearch" HorizontalAlignment="Left" Height="25" Margin="619,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="278" Background="#FFFFEDED" KeyDown="TBSearch_KeyDown"/>
+        <Button x:Name="SearchBut" Style="{StaticResource ButStyle}" Content="Search" HorizontalAlignment="Left" Margin="669,32,0,0" VerticalAlignment="Top" Width="75" Height="25" Click="SearchBut_Click" FontFamily="Sitka Small"/>
+        <Image x:Name="ImagePlaylist" HorizontalAlignment="Left" Height="200" Margin="20,103,0,0" VerticalAlignment="Top" Width="200" Visibility="Hidden"/>
+        <TextBlock x:Name="NamePlayListLabel" TextWrapping="Wrap"  HorizontalAlignment="Left" TextAlignment="Center" Visibility="Hidden" Margin="20,305,0,0" VerticalAlignment="Top" Width="200" FontSize="20" FontWeight="Bold" RenderTransformOrigin="0.5,0.5" FontFamily="Georgia" Height="60">
+        </TextBlock>
+        <TextBlock x:Name="TotalPlaylistLabel" TextWrapping="Wrap" HorizontalAlignment="Left" Visibility="Hidden" TextAlignment="Center" Margin="20,365,0,0" VerticalAlignment="Top" Width="200" FontSize="20" FontWeight="Bold" RenderTransformOrigin="0.5,0.5" FontFamily="Georgia" Height="35">
+            <TextBlock TextAlignment="Center" TextWrapping="Wrap"/>
+        </TextBlock>
+        <Button x:Name="SearchAsUrlBut" Style="{StaticResource ButStyle}" Content="Search as Url" HorizontalAlignment="Left" Margin="769,32,0,0" VerticalAlignment="Top" Width="93" Height="25" Click="SearchAsUrlBut_Click" FontFamily="Sitka Small"/>
 
     </Grid>
 </Window>
