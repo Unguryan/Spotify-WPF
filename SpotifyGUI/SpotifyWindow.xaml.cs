@@ -366,7 +366,10 @@ namespace SpotifyGUI
                     if (g.Track.Artists != null)
                         g.Track.Name += " - " + g.Track.Artists.FirstOrDefault().Name;
                 }
-                Visible(DGAllVis: Visibility.Hidden, DGCurrentVis: Visibility.Visible, MyPBut: true);
+                Visible(DGAllVis: Visibility.Hidden, DGCurrentVis: Visibility.Visible, BackButVis: Visibility.Visible,
+                    ChartBut: ChartsBut.IsEnabled, FeatBut: FeaturedBut.IsEnabled, GenreBut: GenresBut.IsEnabled, MyPBut: MyPlayBut.IsEnabled,
+                    NewRealBut: NewRealisesBut.IsEnabled, RecBut: RecentlyBut.IsEnabled,
+                     FeatText: "");
                 DGCurrent.ItemsSource = list;
             }
             catch
@@ -439,10 +442,10 @@ namespace SpotifyGUI
                 var obj = JsonConvert.DeserializeObject<Paging<PlaylistTrack>>(tuple.Item2);
 
                 DGCurrent.ItemsSource = obj.Items;
-                Visible(DGAllVis: Visibility.Hidden, DGCurrentVis: Visibility.Visible, BackButVis: Visibility.Hidden,
+                Visible(DGAllVis: Visibility.Hidden, DGCurrentVis: Visibility.Visible, BackButVis: Visibility.Visible,
                     ChartBut: ChartsBut.IsEnabled, FeatBut: FeaturedBut.IsEnabled, GenreBut: GenresBut.IsEnabled, MyPBut: MyPlayBut.IsEnabled,
                     NewRealBut: NewRealisesBut.IsEnabled, RecBut: RecentlyBut.IsEnabled,
-                     uriImage: objPlay.UrlImage, NamePlaylistLabel: objPlay.Name, TotalPlayListLabel: objPlay.Tracks.Total.ToString(), FeatText: Feat.Content.ToString());
+                     uriImage: objPlay.UrlImage, NamePlaylistLabel: objPlay.Name, TotalPlayListLabel: objPlay.Tracks.Total.ToString(), FeatText: "");
                 return;
             }
             if (TBSearch.Text.StartsWith("https://open.spotify.com/show/"))
@@ -466,10 +469,10 @@ namespace SpotifyGUI
                 }
                 
                 DGCurrent.ItemsSource = list;
-                Visible(DGAllVis: Visibility.Hidden, DGCurrentVis: Visibility.Visible, BackButVis: Visibility.Hidden,
+                Visible(DGAllVis: Visibility.Hidden, DGCurrentVis: Visibility.Visible, BackButVis: Visibility.Visible,
                     ChartBut: ChartsBut.IsEnabled, FeatBut: FeaturedBut.IsEnabled, GenreBut: GenresBut.IsEnabled, MyPBut: MyPlayBut.IsEnabled,
                     NewRealBut: NewRealisesBut.IsEnabled, RecBut: RecentlyBut.IsEnabled,
-                      uriImage: objPlay.UrlImage, NamePlaylistLabel: objPlay.Name, TotalPlayListLabel: objPlay.Tracks.Total.ToString(), FeatText: Feat.Content.ToString());
+                      uriImage: objPlay.UrlImage, NamePlaylistLabel: objPlay.Name, TotalPlayListLabel: objPlay.Tracks.Total.ToString(), FeatText: "");
                 return;
             }
             if (TBSearch.Text.StartsWith("https://open.spotify.com/artist/"))
@@ -487,10 +490,23 @@ namespace SpotifyGUI
                     list.Add(new PlaylistTrack() { Track = t });
                 }
                 DGCurrent.ItemsSource = list;
-                Visible(DGAllVis: Visibility.Hidden, DGCurrentVis: Visibility.Visible, BackButVis: Visibility.Hidden,
+                Visible(DGAllVis: Visibility.Hidden, DGCurrentVis: Visibility.Visible, BackButVis: Visibility.Visible,
                     ChartBut: ChartsBut.IsEnabled, FeatBut: FeaturedBut.IsEnabled, GenreBut: GenresBut.IsEnabled, MyPBut: MyPlayBut.IsEnabled,
                     NewRealBut: NewRealisesBut.IsEnabled, RecBut: RecentlyBut.IsEnabled,
-                     uriImage: objPlay.UrlImage, NamePlaylistLabel: objPlay.Name, TotalPlayListLabel: obj.Tracks.Count.ToString(), FeatText: Feat.Content.ToString());
+                     uriImage: objPlay.UrlImage, NamePlaylistLabel: objPlay.Name, TotalPlayListLabel: obj.Tracks.Count.ToString(), FeatText: "");
+                return;
+            }
+            if (TBSearch.Text.StartsWith("https://open.spotify.com/track/"))
+            {
+                Tuple<ResponseInfo, string> tuplePlay = client.Download(builder.GetTrack(TBSearch.Text.Substring(31)), headers);
+                var objPlay = JsonConvert.DeserializeObject<FullTrack>(tuplePlay.Item2);
+
+                List<PlaylistTrack> list = new List<PlaylistTrack>(){ new PlaylistTrack(){Track = objPlay } };
+                DGCurrent.ItemsSource = list;
+                Visible(DGAllVis: Visibility.Hidden, DGCurrentVis: Visibility.Visible, BackButVis: Visibility.Visible,
+                    ChartBut: ChartsBut.IsEnabled, FeatBut: FeaturedBut.IsEnabled, GenreBut: GenresBut.IsEnabled, MyPBut: MyPlayBut.IsEnabled,
+                    NewRealBut: NewRealisesBut.IsEnabled, RecBut: RecentlyBut.IsEnabled,
+                     FeatText: "");
                 return;
             }
         }
