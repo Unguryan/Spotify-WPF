@@ -409,7 +409,7 @@ namespace SpotifyGUI
             {
                 NamePlayListLabel.Visibility = Visibility.Hidden;
             }
-            if(NamePlaylistLabel != "") {
+            if(TotalPlayListLabel != "") {
                 TotalPlaylistLabel.Visibility = Visibility.Visible;
                 TotalPlaylistLabel.Text = "Total: " + TotalPlayListLabel;
             }
@@ -501,12 +501,23 @@ namespace SpotifyGUI
                 Tuple<ResponseInfo, string> tuplePlay = client.Download(builder.GetTrack(TBSearch.Text.Substring(31)), headers);
                 var objPlay = JsonConvert.DeserializeObject<FullTrack>(tuplePlay.Item2);
 
-                List<PlaylistTrack> list = new List<PlaylistTrack>(){ new PlaylistTrack(){Track = objPlay } };
+                //objPlay.Name = string.Format("{0} - {1}", objPlay.Artists[0].Name, objPlay.Name);
+                //List<PlaylistTrack> list = new List<PlaylistTrack>(){ new PlaylistTrack(){Track = objPlay } };
+                //DGCurrent.ItemsSource = list;
+
+                Tuple<ResponseInfo, string> tuple = client.Download(builder.GetAlbumTracks(objPlay.Album.Id), headers);
+                var obj = JsonConvert.DeserializeObject<Paging<FullTrack>>(tuple.Item2);
+                List<PlaylistTrack> list = new List<PlaylistTrack>();
+                foreach (var t in obj.Items)
+                {
+                    list.Add(new PlaylistTrack() { Track = t });
+                }
                 DGCurrent.ItemsSource = list;
+                DGCurrent.SelectedItem = list.Where(o => o.Track.Name == objPlay.Name).FirstOrDefault();
                 Visible(DGAllVis: Visibility.Hidden, DGCurrentVis: Visibility.Visible, BackButVis: Visibility.Visible,
                     ChartBut: ChartsBut.IsEnabled, FeatBut: FeaturedBut.IsEnabled, GenreBut: GenresBut.IsEnabled, MyPBut: MyPlayBut.IsEnabled,
                     NewRealBut: NewRealisesBut.IsEnabled, RecBut: RecentlyBut.IsEnabled,
-                     FeatText: "");
+                     FeatText: "", uriImage: objPlay.Album.UrlImage, NamePlaylistLabel: objPlay.Album.Name, TotalPlayListLabel: obj.Items.Count.ToString());
                 return;
             }
         }

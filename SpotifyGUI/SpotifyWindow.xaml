@@ -88,6 +88,7 @@
             <Style.Triggers>
                 <Trigger Property="DataGridCell.IsSelected" Value="True">
                     <Setter Property="Background" Value="#EF7266" />
+                    <Setter Property="Foreground" Value="White"/>
                     <Setter Property="BorderThickness" Value="0"></Setter>
                 </Trigger>
             </Style.Triggers>
